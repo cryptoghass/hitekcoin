@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Hi-TEK
+Comment=Hi-TEK P2P Cryptocurrency
+Comment[ru]=Hi-TEK, P2P криптовалюта
+Comment[fr]=Hi-TEK, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Hi-TEK, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/Hi-TEK-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/Hi-TEK80.xpm
+MimeType=x-scheme-handler/Hi-TEK;
+Categories=Office;

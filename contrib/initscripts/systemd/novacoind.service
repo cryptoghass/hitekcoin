@@ -1,0 +1,11 @@
+[Unit]
+Description=Hi-TEK daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=Hi-TEK
+ExecStart=/opt/Hi-TEK/Hi-TEKd
+
+[Install]
+WantedBy=multi-user.target

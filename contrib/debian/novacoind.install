@@ -1,0 +1,2 @@
+debian/bin/Hi-TEKd usr/bin
+src/Hi-TEKd usr/lib/Hi-TEK

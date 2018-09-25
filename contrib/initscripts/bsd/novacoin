@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: Hi-TEK
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# Hi-TEK_enable (bool): Set to NO by default. Set this variable to YES if you want to enable Hi-TEK service.
+# Hi-TEK_config (path): Set to /usr/local/etc/Hi-TEK.conf by default.
+# Hi-TEK_user:  The user account Hi-TEK daemon runs as. It uses 'root' user by default.
+# Hi-TEK_group: The group account Hi-TEK daemon runs as. It uses 'wheel' group by default.
+# Hi-TEK_datadir (str): Default to "/var/db/Hi-TEK". Base data directory.
+
+. /etc/rc.subr
+
+name=Hi-TEK
+rcvar=Hi-TEK_enable
+
+: ${Hi-TEK_enable:=NO}
+: ${Hi-TEK_config=/usr/local/etc/Hi-TEK.conf}
+: ${Hi-TEK_datadir=/var/db/Hi-TEK}
+: ${Hi-TEK_user="root"}
+: ${Hi-TEK_group="wheel"}
+
+required_files=${Hi-TEK_config}
+command=/usr/local/bin/Hi-TEKd
+Hi-TEK_chdir=${Hi-TEK_datadir}
+pidfile="${Hi-TEK_datadir}/Hi-TEKd.pid"
+stop_cmd=Hi-TEK_stop
+command_args="-conf=${Hi-TEK_config} -datadir=${Hi-TEK_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+Hi-TEK_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${Hi-TEK_datadir}
+	[ $? -eq 0 ] && chown -R ${Hi-TEK_user}:${Hi-TEK_group} ${Hi-TEK_datadir}
+}
+
+Hi-TEK_prestart()
+{
+	if [ ! -d "${Hi-TEK_datadir}/." ]; then
+		Hi-TEK_create_datadir || return 1
+	fi
+}
+
+Hi-TEK_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+Hi-TEK_stop()
+{
+    Hi-TEK_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${Hi-TEK_config} -datadir=${Hi-TEK_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

@@ -1,0 +1,5 @@
+Hi-TEK-qt usr/bin
+share/pixmaps/Hi-TEK32.xpm usr/share/pixmaps
+share/pixmaps/Hi-TEK80.xpm usr/share/pixmaps
+debian/Hi-TEK-qt.desktop usr/share/applications
+debian/Hi-TEK-qt.protocol usr/share/kde4/services/
